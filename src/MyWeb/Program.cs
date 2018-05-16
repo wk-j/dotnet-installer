@@ -8,34 +8,48 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Hosting.WindowsServices;
+using System.Configuration;
+using System.ServiceProcess;
 
 namespace MyWeb {
-    public class Program {
-        public static void Main(string[] args) {
 
-            bool isService = true;
-            if (Debugger.IsAttached || args.Contains("--console")) {
-                isService = false;
-            }
-
-            var pathToContentRoot = Directory.GetCurrentDirectory();
-            if (isService) {
-                var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
-                pathToContentRoot = Path.GetDirectoryName(pathToExe);
-            }
-
-            var webHostcArgs = args.Where(arg => arg != "--console").ToArray();
+    public class Starter {
+        public static void Start(String[] webHostcArgs) {
+            var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
+            var pathToContentRoot = Path.GetDirectoryName(pathToExe);
 
             var host = WebHost.CreateDefaultBuilder(webHostcArgs)
                 .UseContentRoot(pathToContentRoot)
                 .UseStartup<Startup>()
                 .Build();
 
-            if (isService) {
-                host.RunAsService();
+            host.Run();
+        }
+    }
+
+    public class MyService : ServiceBase {
+        private string[] args;
+
+        public MyService(string[] args) => this.args = args;
+        protected override void OnStart(String[] args) {
+            Starter.Start(args);
+            base.OnStart(args);
+        }
+
+        protected override void OnStop() {
+            base.OnStop();
+        }
+
+    }
+
+    public class Program {
+        public static void Main(string[] args) {
+            var noConsole = args.Where(x => x != "--console").ToArray();
+            if (args.Contains("--console")) {
+                Starter.Start(noConsole);
             } else {
-                host.Run();
+                ServiceBase[] servicesToRun = new ServiceBase[] { new MyService(noConsole) };
+                ServiceBase.Run(servicesToRun);
             }
         }
     }

@@ -10,9 +10,9 @@ Task("Restore").Does(() => {
         DotNetCoreRestore(project);
 });
 
-Task("Publish").Does(() => {
+Task("Publish-Web").Does(() => {
         DotNetCorePublish(project, new DotNetCorePublishSettings {
-                OutputDirectory = "publish"
+                OutputDirectory = "publish/MyWeb"
         });
 });
 Task("Build").Does(() => {
@@ -21,7 +21,7 @@ Task("Build").Does(() => {
 
 Task("Publish-App").Does(() => {
         DotNetCorePublish(project, new DotNetCorePublishSettings {
-                OutputDirectory = "publish"
+                OutputDirectory = "publish/MyApp"
         });
 });
 
