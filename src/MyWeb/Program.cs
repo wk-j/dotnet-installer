@@ -32,7 +32,9 @@ namespace MyWeb {
 
         public MyService(string[] args) => this.args = args;
         protected override void OnStart(String[] args) {
-            Starter.Start(args);
+            Task.Run(() => {
+                Starter.Start(args);
+            });
             base.OnStart(args);
         }
 

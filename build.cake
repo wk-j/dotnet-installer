@@ -3,24 +3,17 @@
 
 using PS = StartProcess.Processor;
 
-var name = "MyApp";
-var project = $"src/{name}/{name}.csproj";
-
-Task("Restore").Does(() => {
-        DotNetCoreRestore(project);
-});
+var webProject = $"src/MyWeb/MyWeb.csproj";
+var appProject = $"src/MyApp/MyApp.csproj";
 
 Task("Publish-Web").Does(() => {
-        DotNetCorePublish(project, new DotNetCorePublishSettings {
+        DotNetCorePublish(webProject, new DotNetCorePublishSettings {
                 OutputDirectory = "publish/MyWeb"
         });
 });
-Task("Build").Does(() => {
-        DotNetCoreBuild(project);
-});
 
 Task("Publish-App").Does(() => {
-        DotNetCorePublish(project, new DotNetCorePublishSettings {
+        DotNetCorePublish(appProject, new DotNetCorePublishSettings {
                 OutputDirectory = "publish/MyApp"
         });
 });
