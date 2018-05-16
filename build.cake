@@ -3,6 +3,15 @@
 
 using PS = StartProcess.Processor;
 
+var name = "MyWeb";
+var project = $"src/{name}/{name}.csproj";
+
+Task("Publish").Does(() => {
+        DotNetCorePublish(project, new DotNetCorePublishSettings {
+                OutputDirectory = "publish"
+        });
+});
+
 Task("Build-Windows")
         .Does(() => {
                 var project = "MyWeb.WindowsService";
