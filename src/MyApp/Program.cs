@@ -11,7 +11,7 @@ namespace MyApp {
         }
     }
 
-    class MyService : ServiceBase {
+    public class MyService : ServiceBase {
         protected override void OnStart(string[] args) {
             Util.Write("OnStart");
             base.OnStart(args);
@@ -25,7 +25,8 @@ namespace MyApp {
     class Program {
 
         static void Main(string[] args) {
-            Util.Write("Main");
+            ServiceBase[] servicesToRun = new ServiceBase[] { new MyService() };
+            ServiceBase.Run(servicesToRun);
         }
     }
 }

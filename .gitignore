@@ -10,4 +10,5 @@ packages
 tools
 publish
 
+*.msi
 .paket
