@@ -97,7 +97,7 @@ class Program {
     }
 
     static string GetProjectDir() {
-        var projectDir = @"Z:\GitHub\DotNetInstaller\publish";
+        var projectDir = @"Z:\GitHub\DotNetInstaller\publish\MyApp";
         return projectDir;
     }
 

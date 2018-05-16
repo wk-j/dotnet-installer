@@ -14,11 +14,13 @@ namespace MyApp {
     }
 
     public class MyService : ServiceBase {
+
+        private bool stop = false;
         protected override void OnStart(string[] args) {
             Util.Write("OnStart");
 
             Task.Run(() => {
-                while (true) {
+                while (!stop) {
                     Thread.Sleep(1000);
                 }
             });
@@ -27,6 +29,7 @@ namespace MyApp {
 
         }
         protected override void OnStop() {
+            stop = true;
             Util.Write("OnStop");
             base.OnStop();
         }

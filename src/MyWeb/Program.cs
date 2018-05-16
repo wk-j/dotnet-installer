@@ -14,7 +14,7 @@ using System.ServiceProcess;
 namespace MyWeb {
 
     public class Starter {
-        public static void Start(String[] webHostcArgs) {
+        public static IWebHost Start(String[] webHostcArgs) {
             var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
             var pathToContentRoot = Path.GetDirectoryName(pathToExe);
 
@@ -24,21 +24,26 @@ namespace MyWeb {
                 .Build();
 
             host.Run();
+            return host;
         }
     }
 
     public class MyService : ServiceBase {
         private string[] args;
+        private IWebHost host;
 
         public MyService(string[] args) => this.args = args;
         protected override void OnStart(String[] args) {
             Task.Run(() => {
-                Starter.Start(args);
+                host = Starter.Start(args);
             });
             base.OnStart(args);
         }
 
         protected override void OnStop() {
+            if (host != null) {
+                host.StopAsync().GetAwaiter().GetResult();
+            }
             base.OnStop();
         }
 
