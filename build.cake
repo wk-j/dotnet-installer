@@ -3,7 +3,7 @@
 
 using PS = StartProcess.Processor;
 
-var name = "MyWeb";
+var name = "MyApp";
 var project = $"src/{name}/{name}.csproj";
 
 Task("Restore").Does(() => {
@@ -19,8 +19,10 @@ Task("Build").Does(() => {
         DotNetCoreBuild(project);
 });
 
-Task("Run").Does(() => {
-
+Task("Publish-App").Does(() => {
+        DotNetCorePublish(project, new DotNetCorePublishSettings {
+                OutputDirectory = "publish"
+        });
 });
 
 var  target = Argument("target", "default");
