@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Hosting.WindowsServices;
 namespace MyWeb {
     public class Program {
         public static void Main(string[] args) {
+
             bool isService = true;
             if (Debugger.IsAttached || args.Contains("--console")) {
                 isService = false;
@@ -30,8 +31,6 @@ namespace MyWeb {
                 .UseContentRoot(pathToContentRoot)
                 .UseStartup<Startup>()
                 .Build();
-
-            host.RunAsService();
 
             if (isService) {
                 host.RunAsService();

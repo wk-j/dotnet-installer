@@ -2,12 +2,15 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" version="2.1.0-rc1-final"/>
+    <PackageReference Include="Microsoft.AspNetCore.App" version="2.1.0-rc1-final" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" version="2.1.0-rc1-final" />
+    <!-- <PackageReference Include="System.Memory" Version="4.5.0-rc1" /> -->
+    <!-- <PackageReference Include="NETStandard.Library" Versin="2.0.3" /> -->
   </ItemGroup>
 </Project>
