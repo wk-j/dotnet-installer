@@ -64,9 +64,9 @@ class Utiltiy {
 class Program {
     static Dir GetTopDir(FileFilter filter) {
         var exe = filter.GetWixFiles("*.exe");
-        var config = filter.GetWixFiles("*.json");
+        var json = filter.GetWixFiles("*.json");
         var dll = filter.GetWixFiles("*.dll");
-        // var md5 = filter.GetWixFiles("*.md5");
+        var config = filter.GetWixFiles("*.config");
         // var bat = filter.GetWixFiles("*.bat");
 
         config.ForEach(x => x.SetComponentPermanent(true));
@@ -75,7 +75,7 @@ class Program {
         files.AddRange(exe);
         files.AddRange(config);
         files.AddRange(dll);
-        //files.AddRange(bat);
+        files.AddRange(json);
         //files.AddRange(md5);
 
         var dir = new Dir(".", files.ToArray());
@@ -102,7 +102,7 @@ class Program {
     }
 
     static string GetVertion() {
-        var version = "0.1.0";
+        var version = "0.2.0";
         return version;
     }
 
