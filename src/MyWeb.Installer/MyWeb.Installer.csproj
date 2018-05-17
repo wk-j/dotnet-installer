@@ -6,5 +6,6 @@
   <ItemGroup>
     <PackageReference Include="WixSharp" Version="1.6.4.3-HotFix" />
     <PackageReference Include="WixSharp.bin" Version="1.6.4.3" />
+    <PackageReference Include="wk.ProjectParser" Version="0.4.0" />
   </ItemGroup>
 </Project>

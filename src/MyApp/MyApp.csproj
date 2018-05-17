@@ -2,6 +2,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net461</TargetFramework>
+    <Version>0.1.0</Version>
     <!-- <RuntimeIdentifier>win7-x64</RuntimeIdentifier> -->
   </PropertyGroup>
   <ItemGroup>

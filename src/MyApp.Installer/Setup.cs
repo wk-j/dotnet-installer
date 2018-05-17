@@ -101,14 +101,16 @@ class Program {
         return projectDir;
     }
 
-    static string GetVertion() {
-        var version = "0.2.0";
+    static string GetVersion() {
+        var info = ProjectParser.Parser.Parse(@"Z:\GitHub\DotNetInstaller\src\MyApp\MyApp.csproj");
+        var version = info.Version;
         return version;
     }
 
+
     static Config CreateConfig() {
         var projectDir = GetProjectDir();
-        var version = GetVertion();
+        var version = GetVersion();
         var installerName = $"MyApp.{version}";
         var config = new Config {
             ProjectDir = projectDir,
@@ -121,7 +123,7 @@ class Program {
 
     static void Main(string[] args) {
         var config = CreateConfig();
-        var version = GetVertion();
+        var version = GetVersion();
 
         Environment.SetEnvironmentVariable("WIXSHARP_WIXDIR", config.ToolLocation, EnvironmentVariableTarget.Process);
 

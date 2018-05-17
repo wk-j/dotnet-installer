@@ -102,7 +102,8 @@ class Program {
     }
 
     static string GetVertion() {
-        var version = "0.2.0";
+        var info = ProjectParser.Parser.Parse(@"Z:\GitHub\DotNetInstaller\src\MyWeb\MyWeb.csproj");
+        var version = info.Version;
         return version;
     }
 

@@ -3,6 +3,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Version>0.1.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="wwwroot\" />
