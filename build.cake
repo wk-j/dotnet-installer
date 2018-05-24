@@ -33,8 +33,10 @@ Task("Build-App")
 });
 
 Task("Publish-Ubuntu").Does(() => {
+        var root = "publish/Ubuntu";
+        CleanDirectory(root);
         DotNetCorePublish("ubuntu/UbuntuApp", new DotNetCorePublishSettings {
-                OutputDirectory = "publish/Ubuntu/opt/UbuntuApp",
+                OutputDirectory = $"{root}/opt/ubuntu-app",
                 Runtime = "ubuntu-x64",
                 Framework = "netcoreapp2.0"
         });
@@ -43,9 +45,12 @@ Task("Publish-Ubuntu").Does(() => {
 Task("Create-Deb")
         .IsDependentOn("Publish-Ubuntu")
         .Does(() => {
-                CreateDirectory("publish/Ubuntu/DEBIAN");
-                CopyFile("control/control", "publish/Ubuntu/DEBIAN/control");
-                PS.StartProcess("dpkg-deb --build publish/Ubuntu UbuntuApp.deb");
+                var root = "publish/Ubuntu";
+                CreateDirectory($"{root}/DEBIAN");
+                CreateDirectory($"{root}/etc/systemd/system");
+                CopyFile("control/control", $"{root}/DEBIAN/control");
+                CopyFile("control/ubuntuapp.service", $"{root}/etc/systemd/system/ubuntuapp.service");
+                PS.StartProcess($"dpkg-deb --build {root} ubuntu-app.deb");
         });
 
 var  target = Argument("target", "default");
