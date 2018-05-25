@@ -6,7 +6,7 @@ After=network.target
 WorkingDirectory=/opt/UbuntuWeb
 User=root
 Restart=always
-Type=forking
+# Type=forking
 ExecStart=/opt/UbuntuWeb/UbuntuWeb
 
 [Install]
