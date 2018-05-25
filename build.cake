@@ -32,8 +32,8 @@ Task("Build-App")
                 DotNetCoreBuild("src/MyApp.Installer");
 });
 
-Task("Publish-Ubuntu").Does(() => {
-        var root = "publish/Ubuntu";
+Task("Publish-Ubuntu-App").Does(() => {
+        var root = "publish/ubuntu-app";
         CleanDirectory(root);
         DotNetCorePublish("src/ubuntu/UbuntuApp", new DotNetCorePublishSettings {
                 OutputDirectory = $"{root}/opt/ubuntu-app",
@@ -42,11 +42,11 @@ Task("Publish-Ubuntu").Does(() => {
         });
 });
 
-Task("Create-Deb")
-        .IsDependentOn("Publish-Ubuntu")
+Task("Create-App-Deb")
+        .IsDependentOn("Publish-Ubuntu-App")
         .Does(() => {
                 var info = Parser.Parse("src/ubuntu/UbuntuApp/UbuntuApp.csproj");
-                var root = "publish/Ubuntu";
+                var root = "publish/ubuntu-app";
                 CreateDirectory($"{root}/DEBIAN");
                 CreateDirectory($"{root}/etc/systemd/system");
                 CopyFile("control/control", $"{root}/DEBIAN/control");
@@ -54,5 +54,28 @@ Task("Create-Deb")
                 PS.StartProcess($"dpkg-deb --build {root} publish/ubuntu-app.{info.Version}.deb");
         });
 
+// --- WEB
+
+Task("Publish-Ubuntu-Web").Does(() => {
+        var root = "publish/UbuntuWeb";
+        CleanDirectory(root);
+        DotNetCorePublish("src/ubuntu/UbuntuWeb", new DotNetCorePublishSettings {
+                OutputDirectory = $"{root}/opt/UbuntuWeb",
+                Runtime = "ubuntu-x64",
+                Framework = "netcoreapp2.1"
+        });
+});
+
+Task("Create-Web-Deb")
+        .IsDependentOn("Publish-Ubuntu-Web")
+        .Does(() => {
+                var info = Parser.Parse("src/ubuntu/UbuntuWeb/UbuntuWeb.csproj");
+                var root = "publish/UbuntuWeb";
+                CreateDirectory($"{root}/DEBIAN");
+                CreateDirectory($"{root}/etc/systemd/system");
+                CopyFile("control/web/control", $"{root}/DEBIAN/control");
+                CopyFile("control/web/UbuntuWeb.service", $"{root}/etc/systemd/system/UbuntuWeb.service");
+                PS.StartProcess($"dpkg-deb --build {root} publish/UbuntuWeb.{info.Version}.deb");
+        });
 var  target = Argument("target", "default");
 RunTarget(target);

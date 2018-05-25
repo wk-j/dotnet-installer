@@ -1,0 +1,13 @@
+[Unit]
+Description=Hello Web
+After=network.target
+
+[Service]
+WorkingDirectory=/opt/UbuntuWeb
+User=root
+Restart=always
+Type=forking
+ExecStart=/opt/UbuntuWeb/UbuntuWeb
+
+[Install]
+WantedBy=multi-user.target
