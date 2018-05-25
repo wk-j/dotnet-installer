@@ -1,12 +1,11 @@
-// #addin "wk.StartProcess";
-#addin nuget:?package=wk.StartProcess&version=18.5.0
+#addin "wk.StartProcess";
+#addin "wk.ProjectParser";
 
 using PS = StartProcess.Processor;
-
-var webProject = $"src/MyWeb/MyWeb.csproj";
-var appProject = $"src/MyApp/MyApp.csproj";
+using ProjectParser;
 
 Task("Publish-Web").Does(() => {
+        var webProject = $"src/console/MyWeb/MyWeb.csproj";
         DotNetCoreClean(webProject);
         DotNetCorePublish(webProject, new DotNetCorePublishSettings {
                 OutputDirectory = "publish/MyWeb"
@@ -14,6 +13,7 @@ Task("Publish-Web").Does(() => {
 });
 
 Task("Publish-App").Does(() => {
+        var appProject = $"src/console/MyApp/MyApp.csproj";
         DotNetCoreClean(appProject);
         DotNetCorePublish(appProject, new DotNetCorePublishSettings {
                 OutputDirectory = "publish/MyApp"
@@ -35,7 +35,7 @@ Task("Build-App")
 Task("Publish-Ubuntu").Does(() => {
         var root = "publish/Ubuntu";
         CleanDirectory(root);
-        DotNetCorePublish("ubuntu/UbuntuApp", new DotNetCorePublishSettings {
+        DotNetCorePublish("src/ubuntu/UbuntuApp", new DotNetCorePublishSettings {
                 OutputDirectory = $"{root}/opt/ubuntu-app",
                 Runtime = "ubuntu-x64",
                 Framework = "netcoreapp2.0"
@@ -45,12 +45,13 @@ Task("Publish-Ubuntu").Does(() => {
 Task("Create-Deb")
         .IsDependentOn("Publish-Ubuntu")
         .Does(() => {
+                var info = Parser.Parse("src/ubuntu/UbuntuApp/UbuntuApp.csproj");
                 var root = "publish/Ubuntu";
                 CreateDirectory($"{root}/DEBIAN");
                 CreateDirectory($"{root}/etc/systemd/system");
                 CopyFile("control/control", $"{root}/DEBIAN/control");
                 CopyFile("control/ubuntuapp.service", $"{root}/etc/systemd/system/ubuntuapp.service");
-                PS.StartProcess($"dpkg-deb --build {root} ubuntu-app.deb");
+                PS.StartProcess($"dpkg-deb --build {root} publish/ubuntu-app.{info.Version}.deb");
         });
 
 var  target = Argument("target", "default");
